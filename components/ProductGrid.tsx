@@ -4,7 +4,7 @@ import HomeTabBar from './HomeTabBar';
 import { client } from '@/sanity/lib/client';
 import Container from './Container';
 import { productType } from '@/constants/Data';
-import { motion, AnimatePresence } from "framer-motion"; // Updated import to framer-motion
+import { motion, AnimatePresence } from "framer-motion";
 import NoProductAvailable from './NoProductAvailable';
 import { Loader2 } from 'lucide-react';
 import ProductCard from './ProductCard';
@@ -14,12 +14,13 @@ const ProductGrid = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedTab, setSelectedTab] = useState(productType[0]?.title || "");
-  const query = `*[_type == "product" && variant == $variant] | order(name asc){
-    ...,"categories": categories[]->title
-  }`;
-  const params = { variant: selectedTab.toLowerCase() };
 
   useEffect(() => {
+    const query = `*[_type == "product" && variant == $variant] | order(name asc){
+      ...,"categories": categories[]->title
+    }`;
+    const params = { variant: selectedTab.toLowerCase() };
+
     const fetchData = async () => {
       setLoading(true);
       try {
@@ -31,6 +32,7 @@ const ProductGrid = () => {
         setLoading(false);
       }
     };
+
     fetchData();
   }, [selectedTab]);
 
@@ -51,8 +53,8 @@ const ProductGrid = () => {
         </div>
       ) : products?.length ? (
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-8">
-          {products?.map((product) => (
-            <AnimatePresence key={product?._id}>
+          {products.map((product) => (
+            <AnimatePresence key={product._id}>
               <motion.div
                 layout
                 initial={{ opacity: 0, y: 20 }}
@@ -60,7 +62,7 @@ const ProductGrid = () => {
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
               >
-                <ProductCard key={product?._id} product={product} />
+                <ProductCard key={product._id} product={product} />
               </motion.div>
             </AnimatePresence>
           ))}
