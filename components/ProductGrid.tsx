@@ -23,11 +23,23 @@ const ProductGrid = () => {
 
     const fetchData = async () => {
       setLoading(true);
+
+      // ✅ Log Sanity env vars at runtime
+      console.log("🔍 ENV CHECK:", {
+        projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
+        dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
+        nodeEnv: process.env.NODE_ENV,
+      });
+
+      // ✅ Log query and parameters
+      console.log("🧾 Running GROQ query:", { query, params });
+
       try {
         const response = await client.fetch(query, params);
+        console.log("📦 Fetched products:", response);
         setProducts(await response);
       } catch (error) {
-        console.log("Product fetching Error", error);
+        console.error("❌ Product fetching error:", error);
       } finally {
         setLoading(false);
       }
