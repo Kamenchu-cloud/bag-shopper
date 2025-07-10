@@ -1,95 +1,87 @@
 import { Product } from "@/sanity.types";
 import { urlFor } from "@/sanity/lib/image";
 import Image from "next/image";
-import Link from "next/link";
 import React from "react";
-import ProductSideMenu from "./ProductSideMenu";
-import { Flame, StarIcon } from "lucide-react";
-import Title from "./Title";
+import Link from "next/link";
+import { StarIcon } from "@sanity/icons";
+import { Flame } from "lucide-react";
 import PriceView from "./PriceView";
+import Title from "./Title";
+import ProductSideMenu from "./ProductSideMenu";
 import AddToCartButton from "./AddToCartButton";
 
 const ProductCard = ({ product }: { product: Product }) => {
   return (
-    <div className="text-sm rounded-xl bg-[#F8F7F4] shadow-[3px_3px_8px_rgba(0,0,0,0.08),-3px_-3px_8px_rgba(255,255,255,0.9)] hover:shadow-[4px_4px_10px_rgba(0,0,0,0.1),-4px_-4px_10px_rgba(255,255,255,1)] transition-shadow duration-300 group">
-      <div className="relative group overflow-hidden bg-white rounded-t-xl">
+    <div className="text-sm border-[1px] rounded-md border-darkBlue/20 group bg-white">
+      <div className="relative group overflow-hidden bg-shop_light_bg">
         {product?.images && (
           <Link href={`/product/${product?.slug?.current}`}>
             <Image
-              src={urlFor(product.images[0]).width(500).height(500).url()}
+              src={urlFor(product.images[0]).url()}
               alt="productImage"
               width={500}
               height={500}
               priority
-              className={`w-full h-56 object-contain transition-transform duration-300 ease-out 
-              ${product?.stock !== 0 ? "group-hover:scale-103" : "opacity-60"}`}
+              className={`w-full h-64 object-contain overflow-hidden transition-transform bg-shop_light_bg duration-500 
+              ${product?.stock !== 0 ? "group-hover:scale-105" : "opacity-50"}`}
             />
           </Link>
         )}
         <ProductSideMenu product={product} />
         {product?.status === "sale" ? (
-          <p className="absolute top-3 left-3 z-10 text-xs font-medium text-[#2A4D3E] bg-[#F8F7F4] shadow-[2px_2px_4px_rgba(0,0,0,0.08),-2px_-2px_4px_rgba(255,255,255,0.9)] px-3 py-1.5 rounded-full transition-shadow duration-300 group-hover:shadow-[3px_3px_6px_rgba(0,0,0,0.1),-3px_-3px_6px_rgba(255,255,255,1)]">
-            Sale
+          <p className="absolute top-2 left-2 z-10 text-xs border border-darkColor/50 px-2 rounded-full group-hover:border-lightGreen hover:text-shop_dark_green hoverEffect">
+            Sale!
           </p>
         ) : (
           <Link
             href={"/deal"}
-            className="absolute top-3 left-3 z-10 bg-[#F8F7F4] shadow-[2px_2px_4px_rgba(0,0,0,0.08),-2px_-2px_4px_rgba(255,255,255,0.9)] p-2 rounded-full transition-shadow duration-300 group-hover:shadow-[3px_3px_6px_rgba(0,0,0,0.1),-3px_-3px_6px_rgba(255,255,255,1)]"
+            className="absolute top-2 left-2 z-10 border border-shop_orange/50 p-1 rounded-full group-hover:border-shop_orange hover:text-shop_dark_green hoverEffect"
           >
             <Flame
-              size={16}
-              fill="#D97706"
-              className="text-[#D97706] group-hover:text-[#C16A05] transition-colors duration-300"
+              size={18}
+              fill="#fb6c08"
+              className="text-shop_orange/50 group-hover:text-shop_orange hoverEffect"
             />
           </Link>
         )}
       </div>
-
-      <div className="p-5 flex flex-col gap-4">
+      <div className="p-3 flex flex-col gap-2">
         {product?.categories && (
-          <p className="uppercase line-clamp-1 text-xs font-medium text-gray-500 tracking-widest">
+          <p className="uppercase line-clamp-1 text-xs font-medium text-lightText">
             {product.categories.map((cat) => cat).join(", ")}
           </p>
         )}
-
-        <Title className="text-base font-semibold line-clamp-1 text-gray-900">{product?.name}</Title>
-
+        <Title className="text-sm line-clamp-1">{product?.name}</Title>
         <div className="flex items-center gap-2">
           <div className="flex items-center">
             {[...Array(5)].map((_, index) => (
               <StarIcon
                 key={index}
-                className={index < 4 ? "text-amber-600" : "text-gray-300"}
-                fill={index < 4 ? "#B45309" : "#D1D5DB"}
-                size={14}
+                className={
+                  index < 4 ? "text-shop_light_green" : " text-lightText"
+                }
+                fill={index < 4 ? "#93D991" : "#ababab"}
               />
             ))}
           </div>
-          <p className="text-gray-500 text-xs font-medium">5 Reviews</p>
+          <p className="text-lightText text-xs tracking-wide">5 Reviews</p>
         </div>
 
-        <div className="flex items-center gap-3 border-t border-gray-200 pt-3">
-          <p className="font-medium text-gray-700">In Stock</p>
+        <div className="flex items-center gap-2.5">
+          <p className="font-medium">In Stock</p>
           <p
-            className={`${
-              product?.stock === 0
-                ? "text-red-500 font-medium"
-                : "text-[#2A4D3E] font-medium"
-            }`}
+            className={`${product?.stock === 0 ? "text-red-600" : "text-shop_dark_green/80 font-semibold"}`}
           >
-            {(product?.stock as number) > 0 ? product?.stock : "Unavailable"}
+            {(product?.stock as number) > 0 ? product?.stock : "unavailable"}
           </p>
         </div>
 
         <PriceView
           price={product?.price}
           discount={product?.discount}
-          className="text-base font-semibold text-gray-900"
+          className="text-sm"
         />
-        <AddToCartButton
-          product={product}
-          className="w-36 rounded-full bg-[#F8F7F4] shadow-[2px_2px_4px_rgba(0,0,0,0.08),-2px_-2px_4px_rgba(255,255,255,0.9)] text-[#2A4D3E] hover:shadow-[3px_3px_6px_rgba(0,0,0,0.1),-3px_-3px_6px_rgba(255,255,255,1)] transition-shadow duration-300"
-        />
+        <AddToCartButton product={product} className="w-36 rounded-full" />
       </div>
     </div>
   );
