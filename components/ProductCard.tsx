@@ -4,11 +4,11 @@ import Image from "next/image";
 import React from "react";
 import Link from "next/link";
 import { StarIcon } from "@sanity/icons";
-import { Flame } from "lucide-react";
 import PriceView from "./PriceView";
 import Title from "./Title";
 import ProductSideMenu from "./ProductSideMenu";
 import AddToCartButton from "./AddToCartButton";
+import { Rocket } from "lucide-react";
 
 const ProductCard = ({ product }: { product: Product }) => {
   return (
@@ -37,11 +37,11 @@ const ProductCard = ({ product }: { product: Product }) => {
             href={"/deal"}
             className="absolute top-2 left-2 z-10 border border-shop_orange/50 p-1 rounded-full group-hover:border-shop_orange hover:text-shop_dark_green hoverEffect"
           >
-            <Flame
+            <Rocket
               size={18}
               fill="#fb6c08"
               className="text-shop_orange/50 group-hover:text-shop_orange hoverEffect"
-            />
+               />
           </Link>
         )}
       </div>
